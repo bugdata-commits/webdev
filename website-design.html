@@ -21,6 +21,20 @@
 @media(max-width:850px){.hero-grid{grid-template-columns:1fr;gap:26px}.hero-image{max-width:650px}.navlinks{display:none;position:absolute;top:78px;left:0;right:0;background:#122a30;border-bottom:1px solid var(--line);padding:18px 22px;flex-direction:column;align-items:stretch}.navlinks.open{display:flex}.menu{display:block}.nav-cta{display:none}.included-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.wrap{width:calc(100% - 30px)}.hero{padding:58px 0 48px}.section{padding:68px 0}.prices,.hosting-grid,.included-grid{grid-template-columns:1fr}.price-card{padding:23px}.price-card .fine{min-height:0}.band-inner{justify-content:flex-start}.band-inner span{min-width:43%;font-size:.7rem}.visual-banner{width:calc(100% - 30px);margin-top:22px;border-radius:18px}.visual-banner img{min-height:330px;height:330px;object-fit:cover;object-position:62% center}.visual-banner:after{background:linear-gradient(90deg,rgba(7,33,35,.82) 0%,rgba(7,33,35,.66) 58%,rgba(7,33,35,.15) 100%)}.visual-banner-copy{left:20px;right:20px;top:50%;width:auto;max-width:340px}.visual-banner-copy h2{font-size:clamp(1.7rem,8vw,2.4rem)}.visual-banner-copy p{font-size:.9rem;max-width:300px}.hero-image{border-radius:18px}.hero-image figcaption{font-size:.75rem}.close-box{padding:36px 20px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+/* Glassmorphism + motion: refined translucent layers with readable copy and reduced-motion support. */
+@keyframes bd-rise-in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bd-fade-in{from{opacity:0;transform:translateY(8px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+.nav{background:rgba(16,42,47,.68);border-bottom-color:rgba(183,235,221,.22);box-shadow:0 12px 36px rgba(4,18,20,.14);backdrop-filter:blur(22px) saturate(145%);-webkit-backdrop-filter:blur(22px) saturate(145%)}
+.price-card,.included,.host-card,.terms,.device{backdrop-filter:blur(18px) saturate(135%);-webkit-backdrop-filter:blur(18px) saturate(135%);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 18px 48px rgba(0,0,0,.13)}
+.price-card{background:linear-gradient(145deg,rgba(30,70,74,.62),rgba(18,42,48,.72));border-color:rgba(183,235,221,.21);transition:transform .28s ease,border-color .28s ease,box-shadow .28s ease}
+.price-card:hover{transform:translateY(-5px);border-color:rgba(97,227,207,.48);box-shadow:0 24px 58px rgba(0,0,0,.23),inset 0 1px 0 rgba(255,255,255,.1)}
+.included,.host-card{background:rgba(23,57,62,.48);border-color:rgba(183,235,221,.2);transition:transform .25s ease,border-color .25s ease,background .25s ease}
+.included:hover,.host-card:hover{transform:translateY(-4px);border-color:rgba(97,227,207,.38);background:rgba(30,70,74,.62)}
+.hero-image,.visual-banner{box-shadow:0 26px 72px rgba(0,0,0,.27),0 0 0 1px rgba(255,255,255,.035),inset 0 1px 0 rgba(255,255,255,.15)}
+.hero-image figcaption{background:rgba(18,42,48,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.close-box{border-color:rgba(97,227,207,.38);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 24px 70px rgba(0,0,0,.18)}
+@media(prefers-reduced-motion:no-preference){.hero-grid>div:first-child{animation:bd-rise-in .72s cubic-bezier(.2,.7,.25,1) both}.hero-grid>.hero-image{animation:bd-fade-in .82s .1s cubic-bezier(.2,.7,.25,1) both}.visual-banner{animation:bd-fade-in .75s .18s cubic-bezier(.2,.7,.25,1) both}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important;transition:none!important}}
 </style>
 </head>
 <body>
