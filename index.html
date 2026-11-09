@@ -70,6 +70,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 @media(max-width:600px){.hero{min-height:calc(100svh - 78px);padding:55px 0 50px}.hero-video-overlay{background:linear-gradient(90deg,rgba(7,28,31,.9),rgba(10,36,39,.62)),linear-gradient(0deg,rgba(7,28,31,.82),transparent 50%)}}
 @media(prefers-reduced-motion:reduce){.hero-video{display:none}}
 </style>
+
+<style>
+/* Shared brand environment: the supplied business image sits behind every page. */
+body{background-image:linear-gradient(rgba(7,25,35,.84),rgba(7,25,35,.9)),url('assets/background/bugdata-site-background.webp');background-position:center top;background-size:cover;background-attachment:fixed;background-repeat:no-repeat}
+@media(max-width:700px){body{background-attachment:scroll;background-position:center top}}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
