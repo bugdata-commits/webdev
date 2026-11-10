@@ -64,12 +64,21 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 body{background-image:linear-gradient(rgba(7,25,35,.84),rgba(7,25,35,.9)),url('assets/background/bugdata-robot-background.webp');background-position:center top;background-size:cover;background-attachment:fixed;background-repeat:no-repeat}
 @media(max-width:700px){body{background-attachment:scroll;background-position:center top}}
 </style>
+
+<style>
+/* Primary headline typing treatment: preserves nested gradient markup and respects motion preferences. */
+.typing-headline{position:relative;white-space:pre-wrap}
+.typing-headline.typing-active:after{content:'';display:inline-block;height:.82em;margin-left:.12em;border-right:2px solid var(--accent,#61e3cf);vertical-align:-.08em;animation:typing-caret .8s steps(1,end) infinite}
+.typing-headline.typing-complete:after{display:none}
+@keyframes typing-caret{50%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.typing-headline.typing-active:after{display:none}}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="nav"><div class="wrap nav-inner"><a class="brand" href="index.html" aria-label="Bugdata home"><img class="brand-logo" src="assets/bugdata-logo.png" alt="Bugdata Investments logo" width="48" height="52"><span>BUGDATA<small>BUILD · AUTOMATE · GROW</small></span></a><nav class="nav-links" id="navLinks" aria-label="Main navigation"><a href="solutions.html">Solutions</a><a href="website-design.html">Website Design</a><a href="hosting.html">Hosting</a><a href="ai-automation.html">AI &amp; Automation</a><a href="our-work.html">Our Work</a><a href="process.html">Process</a><a href="faq.html">FAQs</a></nav><a class="btn btn-primary btn-small nav-cta" href="start-project.html">Start a project ↗</a><button class="menu-btn" id="menuBtn" aria-label="Open navigation" aria-expanded="false">☰</button></div></header>
 <main id="main">
-<section class="section light-section" id="process"><div class="wrap"><div class="section-head"><span class="eyebrow">A clear path from idea to launch</span><h2>Good work starts with <span class="gradient">understanding.</span></h2><p>We keep the process collaborative, transparent and focused on what the finished solution needs to achieve.</p></div><div class="steps"><div class="step"><b>01</b><h3>Discover</h3><p>Tell us about your business, challenge, audience and goals.</p></div><div class="step"><b>02</b><h3>Plan & scope</h3><p>We recommend an approach, define deliverables and prepare a proposal.</p></div><div class="step"><b>03</b><h3>Build & refine</h3><p>We design, develop, test and collaborate with you through the work.</p></div><div class="step"><b>04</b><h3>Launch & support</h3><p>We deploy your solution and discuss ongoing support or hosting needs.</p></div></div></div></section>
+<section class="section light-section" id="process"><div class="wrap"><div class="section-head"><span class="eyebrow">A clear path from idea to launch</span><h2 class="typing-headline" data-typing-headline>Good work starts with <span class="gradient">understanding.</span></h2><p>We keep the process collaborative, transparent and focused on what the finished solution needs to achieve.</p></div><div class="steps"><div class="step"><b>01</b><h3>Discover</h3><p>Tell us about your business, challenge, audience and goals.</p></div><div class="step"><b>02</b><h3>Plan & scope</h3><p>We recommend an approach, define deliverables and prepare a proposal.</p></div><div class="step"><b>03</b><h3>Build & refine</h3><p>We design, develop, test and collaborate with you through the work.</p></div><div class="step"><b>04</b><h3>Launch & support</h3><p>We deploy your solution and discuss ongoing support or hosting needs.</p></div></div></div></section>
 </main>
 <footer class="footer"><div class="wrap"><div class="footer-grid"><div><a class="brand" href="index.html"><img class="brand-logo" src="assets/bugdata-logo.png" alt="Bugdata Investments logo" width="48" height="52"><span>BUGDATA<small>BUILD · AUTOMATE · GROW</small></span></a><p style="max-width:280px;margin-top:16px">Building useful digital experiences and business systems that help people work smarter and grow with confidence.</p></div><div><h4>Explore</h4><div class="footer-links"><a href="solutions.html">Solutions</a><a href="website-design.html">Website design &amp; pricing</a><a href="hosting.html">Hosting</a><a href="ai-automation.html">AI &amp; automation</a><a href="our-work.html">Our work</a></div></div><div><h4>Start here</h4><div class="footer-links"><a href="start-project.html">Build a project</a><a href="process.html">Our process</a><a href="faq.html">FAQs</a><a href="start-project.html#contact">Contact</a></div></div><div><h4>Contact Bugdata</h4><div class="footer-links"><a href="https://www.bugdata.co.zw/">bugdata.co.zw</a><a href="tel:+263717051860">071 705 1860</a><a href="tel:+263782067259">078 206 7259</a><a href="https://wa.me/263717051860">WhatsApp us</a></div></div></div><div class="copyright"><span>© <span id="year"></span> Bugdata. All rights reserved.</span><span>Building businesses. Humanising technology. Inspiring possibility.</span></div></div></footer>
 <script>
@@ -77,6 +86,55 @@ const menuBtn=document.getElementById('menuBtn'),navLinks=document.getElementByI
 if(menuBtn&&navLinks){menuBtn.addEventListener('click',()=>{const open=navLinks.classList.toggle('open');menuBtn.setAttribute('aria-expanded',String(open));menuBtn.setAttribute('aria-label',open?'Close navigation':'Open navigation')});navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{navLinks.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');menuBtn.setAttribute('aria-label','Open navigation')}))}
 const year=document.getElementById('year');if(year)year.textContent=new Date().getFullYear();
 const form=document.getElementById('projectForm');if(form){const checks=[...document.querySelectorAll('input[name="service"]')],business=document.getElementById('business');function updateSummary(){const selected=checks.filter(c=>c.checked),count=document.getElementById('selectedCount'),projectName=document.getElementById('projectName');if(count)count.textContent=selected.length;if(projectName)projectName.textContent=business.value.trim()||'Not specified'}checks.forEach(c=>c.addEventListener('change',updateSummary));business.addEventListener('input',updateSummary);document.querySelectorAll('[data-service]').forEach(link=>link.addEventListener('click',()=>{const target=checks.find(c=>c.value===link.dataset.service);if(target){target.checked=true;updateSummary()}}));form.addEventListener('submit',e=>{e.preventDefault();const f=new FormData(form),services=checks.filter(c=>c.checked).map(c=>c.value),message=['Hello Bugdata! I would like to discuss a project.','Name: '+f.get('name'),'Business: '+(f.get('business')||'Not specified'),'Contact: '+f.get('contact'),'Solutions: '+(services.join(', ')||'Not selected'),'Project details: '+(f.get('details')||'Not provided')].join('\n');window.open('https://wa.me/263717051860?text='+encodeURIComponent(message),'_blank','noopener')})}
+</script>
+
+<script>
+(function(){
+  const headings=document.querySelectorAll('[data-typing-headline]');
+  if(!headings.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  headings.forEach((heading,index)=>{
+    const textNodes=[];
+    const walker=document.createTreeWalker(heading,NodeFilter.SHOW_TEXT);
+    let node;
+    while(node=walker.nextNode()){
+      if(node.nodeValue)textNodes.push({node,chars:Array.from(node.nodeValue)});
+    }
+    const fullText=textNodes.map(item=>item.chars.join('')).join('');
+    if(!fullText)return;
+    heading.setAttribute('aria-label',fullText);
+    textNodes.forEach(item=>{item.node.nodeValue=''});
+    heading.classList.add('typing-active');
+    let started=false;
+    const start=()=>{
+      if(started)return;
+      started=true;
+      let visible=0;
+      const total=fullText.length;
+      const reveal=()=>{
+        visible+=1;
+        let remaining=visible;
+        textNodes.forEach(item=>{
+          const count=Math.min(remaining,item.chars.length);
+          item.node.nodeValue=item.chars.slice(0,count).join('');
+          remaining-=count;
+        });
+        if(visible<total){window.setTimeout(reveal,Math.max(22,Math.min(42,1200/total)));}
+        else{
+          textNodes.forEach(item=>{item.node.nodeValue=item.chars.join('')});
+          heading.classList.remove('typing-active');
+          heading.classList.add('typing-complete');
+        }
+      };
+      window.setTimeout(reveal,index*120+240);
+    };
+    if('IntersectionObserver' in window){
+      const observer=new IntersectionObserver(entries=>{
+        if(entries.some(entry=>entry.isIntersecting)){start();observer.disconnect();}
+      },{threshold:.2});
+      observer.observe(heading);
+    }else start();
+  });
+})();
 </script>
 </body>
 </html>

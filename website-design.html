@@ -74,12 +74,21 @@
 body{background-image:linear-gradient(rgba(7,25,35,.84),rgba(7,25,35,.9)),url('assets/background/bugdata-robot-background.webp');background-position:center top;background-size:cover;background-attachment:fixed;background-repeat:no-repeat}
 @media(max-width:700px){body{background-attachment:scroll;background-position:center top}}
 </style>
+
+<style>
+/* Primary headline typing treatment: preserves nested gradient markup and respects motion preferences. */
+.typing-headline{position:relative;white-space:pre-wrap}
+.typing-headline.typing-active:after{content:'';display:inline-block;height:.82em;margin-left:.12em;border-right:2px solid var(--accent,#61e3cf);vertical-align:-.08em;animation:typing-caret .8s steps(1,end) infinite}
+.typing-headline.typing-complete:after{display:none}
+@keyframes typing-caret{50%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.typing-headline.typing-active:after{display:none}}
+</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="nav"><div class="wrap nav-inner"><a class="brand" href="index.html" aria-label="Bugdata home"><img src="assets/bugdata-logo.png" alt="Bugdata Investments logo" width="45" height="50"><span>BUGDATA<small>BUILD · AUTOMATE · GROW</small></span></a><nav class="navlinks" id="navLinks" aria-label="Main navigation"><a href="index.html">Home</a><a href="solutions.html">Solutions</a><a href="website-design.html#offers">Website offers</a><a href="hosting.html">Hosting</a><a href="ai-automation.html">AI &amp; Automation</a><a href="our-work.html">Our Work</a><a href="faq.html">FAQs</a></nav><a class="btn primary small nav-cta" href="start-project.html">Start a project ↗</a><button class="menu" id="menuBtn" aria-label="Open navigation" aria-expanded="false">☰</button></div></header>
 <main id="main">
-<section class="hero"><div class="wrap hero-grid"><div><span class="eyebrow">Website design · launch promotion</span><h1>A better website.<br><span class="gradient">A smarter start.</span></h1><p>Get a professionally designed website for your business, paired with a custom domain, foundational SEO and secure hosting options. Choose an eligible Zimbabwean domain or a .com.</p><div class="actions"><a class="btn primary" href="#offers">See the two launch offers ↓</a><a class="btn secondary" href="https://wa.me/263717051860?text=Hello%20Bugdata%2C%20I%27d%20like%20to%20discuss%20a%20website%20design.">Discuss your website ↗</a></div><div class="trust"><span><b>✓</b> Mobile-friendly design</span><span><b>✓</b> SEO foundations</span><span><b>✓</b> HTTPS security</span></div><div class="quick-prices" aria-label="Website design package prices"><a href="#pkg-zw" class="quick-price"><span>Eligible Zimbabwe domain</span><strong>$24.99</strong><small>USD · launch promotion</small></a><a href="#pkg-com" class="quick-price"><span>.com domain</span><strong>$50</strong><small>USD · launch package</small></a></div></div></div></section>
+<section class="hero"><div class="wrap hero-grid"><div><span class="eyebrow">Website design · launch promotion</span><h1 class="typing-headline" data-typing-headline>A better website.<br><span class="gradient">A smarter start.</span></h1><p>Get a professionally designed website for your business, paired with a custom domain, foundational SEO and secure hosting options. Choose an eligible Zimbabwean domain or a .com.</p><div class="actions"><a class="btn primary" href="#offers">See the two launch offers ↓</a><a class="btn secondary" href="https://wa.me/263717051860?text=Hello%20Bugdata%2C%20I%27d%20like%20to%20discuss%20a%20website%20design.">Discuss your website ↗</a></div><div class="trust"><span><b>✓</b> Mobile-friendly design</span><span><b>✓</b> SEO foundations</span><span><b>✓</b> HTTPS security</span></div><div class="quick-prices" aria-label="Website design package prices"><a href="#pkg-zw" class="quick-price"><span>Eligible Zimbabwe domain</span><strong>$24.99</strong><small>USD · launch promotion</small></a><a href="#pkg-com" class="quick-price"><span>.com domain</span><strong>$50</strong><small>USD · launch package</small></a></div></div></div></section>
 <div class="band"><div class="wrap band-inner"><span><i>✦</i> WEB DESIGN</span><span><i>✦</i> CUSTOM DOMAIN</span><span><i>✦</i> SEARCH-READY SETUP</span><span><i>✦</i> SECURE HTTPS</span></div></div>
 
 <section class="section light-section" id="offers"><div class="wrap"><div class="section-head"><span class="eyebrow">Choose your domain</span><h2>Choose your domain.<br><span class="gradient">See your price upfront.</span></h2><p>Two clear USD package prices. Both include website design, first-year domain registration, foundational SEO, HTTPS setup where supported and your choice of eligible hosting option. Choose an eligible Zimbabwean domain for $24.99 or a .com for $50.</p></div><div class="prices">
@@ -97,6 +106,55 @@ const nav=document.getElementById('navLinks'),button=document.getElementById('me
 button.addEventListener('click',()=>{const open=nav.classList.toggle('open');button.setAttribute('aria-expanded',String(open));button.setAttribute('aria-label',open?'Close navigation':'Open navigation');});
 nav.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{nav.classList.remove('open');button.setAttribute('aria-expanded','false');button.setAttribute('aria-label','Open navigation');}));
 document.getElementById('year').textContent=new Date().getFullYear();
+</script>
+
+<script>
+(function(){
+  const headings=document.querySelectorAll('[data-typing-headline]');
+  if(!headings.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  headings.forEach((heading,index)=>{
+    const textNodes=[];
+    const walker=document.createTreeWalker(heading,NodeFilter.SHOW_TEXT);
+    let node;
+    while(node=walker.nextNode()){
+      if(node.nodeValue)textNodes.push({node,chars:Array.from(node.nodeValue)});
+    }
+    const fullText=textNodes.map(item=>item.chars.join('')).join('');
+    if(!fullText)return;
+    heading.setAttribute('aria-label',fullText);
+    textNodes.forEach(item=>{item.node.nodeValue=''});
+    heading.classList.add('typing-active');
+    let started=false;
+    const start=()=>{
+      if(started)return;
+      started=true;
+      let visible=0;
+      const total=fullText.length;
+      const reveal=()=>{
+        visible+=1;
+        let remaining=visible;
+        textNodes.forEach(item=>{
+          const count=Math.min(remaining,item.chars.length);
+          item.node.nodeValue=item.chars.slice(0,count).join('');
+          remaining-=count;
+        });
+        if(visible<total){window.setTimeout(reveal,Math.max(22,Math.min(42,1200/total)));}
+        else{
+          textNodes.forEach(item=>{item.node.nodeValue=item.chars.join('')});
+          heading.classList.remove('typing-active');
+          heading.classList.add('typing-complete');
+        }
+      };
+      window.setTimeout(reveal,index*120+240);
+    };
+    if('IntersectionObserver' in window){
+      const observer=new IntersectionObserver(entries=>{
+        if(entries.some(entry=>entry.isIntersecting)){start();observer.disconnect();}
+      },{threshold:.2});
+      observer.observe(heading);
+    }else start();
+  });
+})();
 </script>
 </body>
 </html>
