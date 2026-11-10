@@ -10,6 +10,13 @@
   const tableStates = {};
   const charts = {};
   let dashboardData = {};
+  let currentUser = null;
+  let currentRole = null;
+  const permissions = {
+    admin: new Set(['view_dashboard', 'manage_tickets', 'manage_users', 'manage_courses', 'manage_affiliates', 'manage_payments', 'export_reports']),
+    affiliate: new Set(),
+    client: new Set()
+  };
 
   const tableConfig = {
     tickets: { rowsId: 'ticketRows', infoId: 'ticketsPageInfo', columns: 7, defaultSort: 'updated_at' },
@@ -18,6 +25,42 @@
     affiliates: { rowsId: 'affiliateRows', infoId: 'affiliatesPageInfo', columns: 5, defaultSort: 'created_at' },
     payments: { rowsId: 'paymentRows', infoId: 'paymentsPageInfo', columns: 6, defaultSort: 'created_at' }
   };
+
+  function can(permission, role = currentRole) {
+    return Boolean(role && permissions[role]?.has(permission));
+  }
+
+  function applyPermissionUI() {
+    document.querySelectorAll('[data-permission]').forEach((element) => {
+      const allowed = can(element.dataset.permission);
+      element.disabled = !allowed;
+      element.setAttribute('aria-disabled', String(!allowed));
+      element.classList.toggle('permission-denied', !allowed);
+    });
+  }
+
+  async function refreshRole() {
+    if (!client) return null;
+    const { data: { user } } = await client.auth.getUser();
+    if (!user) { currentUser = null; currentRole = null; applyPermissionUI(); return null; }
+    const { data, error } = await client.from('profiles').select('id,role').eq('id', user.id).single();
+    if (error || !data?.role) { currentUser = user; currentRole = null; applyPermissionUI(); return null; }
+    currentUser = user;
+    currentRole = data.role;
+    applyPermissionUI();
+    const state = $('#adminState');
+    if (state && currentRole === 'admin') state.textContent = `Admin connected · ${currentRole}`;
+    return currentRole;
+  }
+
+  async function requirePermission(permission) {
+    const role = await refreshRole();
+    if (!can(permission, role)) {
+      setStatus(`Permission denied: ${permission.replaceAll('_', ' ')} requires administrator access.`, 'status priority');
+      return false;
+    }
+    return true;
+  }
 
   function showDashboard(signedIn) {
     $('#adminAuth').hidden = signedIn;
@@ -51,21 +94,21 @@
   function rowHtml(table, row) {
     if (table === 'tickets') {
       const profile = dashboardData.profileMap.get(row.client_id);
-      return `<tr data-ticket-row><td class="ticket-id">BUG-${String(row.ticket_number).padStart(5, '0')}</td><td>${escapeHtml(profile?.business_name || profile?.full_name || 'Unknown client')}</td><td>${escapeHtml(row.subject)}</td><td><select data-ticket-priority class="table-select"><option value="normal" ${row.priority === 'normal' ? 'selected' : ''}>Normal</option><option value="high" ${row.priority === 'high' ? 'selected' : ''}>High</option><option value="urgent" ${row.priority === 'urgent' ? 'selected' : ''}>Urgent</option></select></td><td><select data-ticket-status class="table-select"><option value="open" ${row.status === 'open' ? 'selected' : ''}>Open</option><option value="in_progress" ${row.status === 'in_progress' ? 'selected' : ''}>In progress</option><option value="awaiting_client" ${row.status === 'awaiting_client' ? 'selected' : ''}>Awaiting client</option><option value="resolved" ${row.status === 'resolved' ? 'selected' : ''}>Resolved</option><option value="closed" ${row.status === 'closed' ? 'selected' : ''}>Closed</option></select></td><td>${formatDate(row.updated_at || row.created_at)}</td><td><button class="button ghost small" data-action="save-ticket" data-id="${row.id}" type="button">Save</button></td></tr>`;
+      return `<tr data-ticket-row><td class="ticket-id">BUG-${String(row.ticket_number).padStart(5, '0')}</td><td>${escapeHtml(profile?.business_name || profile?.full_name || 'Unknown client')}</td><td>${escapeHtml(row.subject)}</td><td><select data-ticket-priority class="table-select"><option value="normal" ${row.priority === 'normal' ? 'selected' : ''}>Normal</option><option value="high" ${row.priority === 'high' ? 'selected' : ''}>High</option><option value="urgent" ${row.priority === 'urgent' ? 'selected' : ''}>Urgent</option></select></td><td><select data-ticket-status class="table-select"><option value="open" ${row.status === 'open' ? 'selected' : ''}>Open</option><option value="in_progress" ${row.status === 'in_progress' ? 'selected' : ''}>In progress</option><option value="awaiting_client" ${row.status === 'awaiting_client' ? 'selected' : ''}>Awaiting client</option><option value="resolved" ${row.status === 'resolved' ? 'selected' : ''}>Resolved</option><option value="closed" ${row.status === 'closed' ? 'selected' : ''}>Closed</option></select></td><td>${formatDate(row.updated_at || row.created_at)}</td><td><button class="button ghost small" data-action="save-ticket" data-permission="manage_tickets" data-id="${row.id}" type="button">Save</button></td></tr>`;
     }
     if (table === 'clients') {
-      return `<tr><td>${escapeHtml(row.full_name || 'Unnamed client')}</td><td>${escapeHtml(row.business_name || '—')}</td><td><select data-client-role class="table-select"><option value="client" ${row.role === 'client' ? 'selected' : ''}>Client</option><option value="affiliate" ${row.role === 'affiliate' ? 'selected' : ''}>Affiliate</option><option value="admin" ${row.role === 'admin' ? 'selected' : ''}>Admin</option></select></td><td>${formatDate(row.created_at)}</td><td><button class="button ghost small" data-action="save-client" data-id="${row.id}" type="button">Save role</button></td></tr>`;
+      return `<tr><td>${escapeHtml(row.full_name || 'Unnamed client')}</td><td>${escapeHtml(row.business_name || '—')}</td><td><select data-client-role class="table-select"><option value="client" ${row.role === 'client' ? 'selected' : ''}>Client</option><option value="affiliate" ${row.role === 'affiliate' ? 'selected' : ''}>Affiliate</option><option value="admin" ${row.role === 'admin' ? 'selected' : ''}>Admin</option></select></td><td>${formatDate(row.created_at)}</td><td><button class="button ghost small" data-action="save-client" data-permission="manage_users" data-id="${row.id}" type="button">Save role</button></td></tr>`;
     }
     if (table === 'courses') {
       const count = dashboardData.enrollmentCounts[row.id] || 0;
-      return `<tr><td>${escapeHtml(row.title || row.slug)}</td><td><span class="status ${row.published ? 'closed' : 'waiting'}">${row.published ? 'Published' : 'Draft'}</span></td><td>${count}</td><td>${formatDate(row.created_at)}</td><td><button class="button ghost small" data-action="toggle-course" data-id="${row.id}" data-published="${row.published}" type="button">${row.published ? 'Unpublish' : 'Publish'}</button></td></tr>`;
+      return `<tr><td>${escapeHtml(row.title || row.slug)}</td><td><span class="status ${row.published ? 'closed' : 'waiting'}">${row.published ? 'Published' : 'Draft'}</span></td><td>${count}</td><td>${formatDate(row.created_at)}</td><td><button class="button ghost small" data-action="toggle-course" data-permission="manage_courses" data-id="${row.id}" data-published="${row.published}" type="button">${row.published ? 'Unpublish' : 'Publish'}</button></td></tr>`;
     }
     if (table === 'affiliates') {
-      return `<tr><td class="ticket-id">${escapeHtml(row.referral_code)}</td><td>${escapeHtml(row.commission_rate)}%</td><td><span class="status ${row.approved ? 'closed' : 'waiting'}">${row.approved ? 'Approved' : 'Pending'}</span></td><td>${formatDate(row.created_at)}</td><td><button class="button ghost small" data-action="toggle-affiliate" data-id="${row.id}" data-approved="${row.approved}" type="button">${row.approved ? 'Revoke' : 'Approve'}</button></td></tr>`;
+      return `<tr><td class="ticket-id">${escapeHtml(row.referral_code)}</td><td>${escapeHtml(row.commission_rate)}%</td><td><span class="status ${row.approved ? 'closed' : 'waiting'}">${row.approved ? 'Approved' : 'Pending'}</span></td><td>${formatDate(row.created_at)}</td><td><button class="button ghost small" data-action="toggle-affiliate" data-permission="manage_affiliates" data-id="${row.id}" data-approved="${row.approved}" type="button">${row.approved ? 'Revoke' : 'Approve'}</button></td></tr>`;
     }
     if (table === 'payments') {
       const order = dashboardData.orderMap.get(row.order_id);
-      return `<tr><td class="ticket-id">${escapeHtml(row.provider_reference || row.id.slice(0, 8))}</td><td>${escapeHtml(order?.description || row.order_id || '—')}</td><td>${escapeHtml(row.amount)} ${escapeHtml(row.currency)}</td><td><select data-payment-status class="table-select"><option value="created" ${row.status === 'created' ? 'selected' : ''}>Created</option><option value="awaiting" ${row.status === 'awaiting' ? 'selected' : ''}>Awaiting</option><option value="paid" ${row.status === 'paid' ? 'selected' : ''}>Paid</option><option value="failed" ${row.status === 'failed' ? 'selected' : ''}>Failed</option><option value="cancelled" ${row.status === 'cancelled' ? 'selected' : ''}>Cancelled</option><option value="refunded" ${row.status === 'refunded' ? 'selected' : ''}>Refunded</option></select></td><td>${formatDate(row.created_at)}</td><td><button class="button ghost small" data-action="save-payment" data-id="${row.id}" type="button">Save</button></td></tr>`;
+      return `<tr><td class="ticket-id">${escapeHtml(row.provider_reference || row.id.slice(0, 8))}</td><td>${escapeHtml(order?.description || row.order_id || '—')}</td><td>${escapeHtml(row.amount)} ${escapeHtml(row.currency)}</td><td><select data-payment-status class="table-select"><option value="created" ${row.status === 'created' ? 'selected' : ''}>Created</option><option value="awaiting" ${row.status === 'awaiting' ? 'selected' : ''}>Awaiting</option><option value="paid" ${row.status === 'paid' ? 'selected' : ''}>Paid</option><option value="failed" ${row.status === 'failed' ? 'selected' : ''}>Failed</option><option value="cancelled" ${row.status === 'cancelled' ? 'selected' : ''}>Cancelled</option><option value="refunded" ${row.status === 'refunded' ? 'selected' : ''}>Refunded</option></select></td><td>${formatDate(row.created_at)}</td><td><button class="button ghost small" data-action="save-payment" data-permission="manage_payments" data-id="${row.id}" type="button">Save</button></td></tr>`;
     }
     return '';
   }
@@ -178,7 +221,8 @@
     drawChart('revenue', 'revenueChart', { type: 'line', data: { labels: months.length ? months : ['No paid data'], datasets: [{ label: 'Revenue', data: months.length ? months.map((month) => paidByMonth[month]) : [0], borderColor: '#b18ad0', backgroundColor: 'rgba(177,138,208,.2)', fill: true, tension: .3 }] }, options: { responsive: true, scales: { x: { ticks: { color: '#b1c8c4' } }, y: { beginAtZero: true, ticks: { color: '#b1c8c4' } } }, plugins: { legend: { labels: { color: '#d3e3df' } } } } });
   }
 
-  async function saveRecord(table, id, changes, label) {
+  async function saveRecord(table, id, changes, label, permission) {
+    if (!(await requirePermission(permission))) return;
     const { error } = await client.from(table).update(changes).eq('id', id);
     if (error) { setStatus(`Could not update ${label}: ${error.message}`, 'status priority'); return; }
     setStatus(`${label} updated successfully.`);
@@ -188,10 +232,9 @@
   async function loadDashboard() {
     if (!client) { showDashboard(false); setAuthStatus('Supabase configuration is missing.', 'status priority'); return; }
     setStatus('Loading live data…');
-    const { data: { user } } = await client.auth.getUser();
-    if (!user) { showDashboard(false); return; }
-    const identity = await client.from('profiles').select('role').eq('id', user.id).single();
-    if (identity.error || identity.data?.role !== 'admin') { showDashboard(false); setAuthStatus('This account is not an administrator.', 'status priority'); await client.auth.signOut(); return; }
+    const role = await refreshRole();
+    if (!role) { showDashboard(false); return; }
+    if (!can('view_dashboard', role)) { showDashboard(false); setAuthStatus('This account is not an administrator.', 'status priority'); await client.auth.signOut(); return; }
     const [profiles, tickets, courses, affiliates, payments, orders, enrollments] = await Promise.all([
       client.from('profiles').select('id,full_name,business_name,role,created_at').order('created_at', { ascending: false }).limit(1000),
       client.from('support_tickets').select('id,ticket_number,client_id,subject,priority,status,updated_at,created_at').order('updated_at', { ascending: false }).limit(1000),
@@ -214,6 +257,7 @@
     $('#paymentCount').textContent = data.payments.filter((payment) => ['created', 'awaiting'].includes(payment.status)).length;
     $('#lastUpdated').textContent = `Updated ${new Date().toLocaleString()}`;
     setupTables(data);
+    applyPermissionUI();
     drawAnalytics(data);
     setStatus(`Loaded ${data.profiles.length} users, ${data.tickets.length} tickets and ${data.payments.length} payment records.`);
   }
@@ -236,7 +280,7 @@
   });
   $('#refreshDashboard')?.addEventListener('click', loadDashboard);
   $('#signOut')?.addEventListener('click', async () => { await client.auth.signOut(); showDashboard(false); setAuthStatus('You have been signed out.'); });
-  client.auth.onAuthStateChange((_event, session) => { if (!session) showDashboard(false); });
+  client.auth.onAuthStateChange((_event, session) => { if (!session) { currentUser = null; currentRole = null; applyPermissionUI(); showDashboard(false); } });
 
   document.addEventListener('input', (event) => { const table = event.target.dataset.tableSearch; if (table && tableStates[table]) { tableStates[table].page = 1; renderTable(table); } });
   document.addEventListener('change', (event) => {
@@ -248,19 +292,19 @@
   document.addEventListener('click', async (event) => {
     const csvButton = event.target.closest('[data-export-csv]');
     const pdfButton = event.target.closest('[data-export-pdf]');
-    if (csvButton) { exportCsv(csvButton.dataset.exportCsv); return; }
-    if (pdfButton) { exportPdf(pdfButton.dataset.exportPdf); return; }
+    if (csvButton) { if (await requirePermission('export_reports')) exportCsv(csvButton.dataset.exportCsv); return; }
+    if (pdfButton) { if (await requirePermission('export_reports')) exportPdf(pdfButton.dataset.exportPdf); return; }
     const prev = event.target.closest('[data-page-prev]');
     const next = event.target.closest('[data-page-next]');
     if (prev || next) { const table = (prev || next).dataset.pagePrev || (prev || next).dataset.pageNext; if (tableStates[table]) { tableStates[table].page += next ? 1 : -1; renderTable(table); } return; }
     const button = event.target.closest('[data-action]');
     if (!button) return;
     const id = button.dataset.id;
-    if (button.dataset.action === 'save-ticket') { const row = button.closest('tr'); await saveRecord('support_tickets', id, { status: row.querySelector('[data-ticket-status]').value, priority: row.querySelector('[data-ticket-priority]').value }, 'Ticket'); }
-    if (button.dataset.action === 'save-client') { const row = button.closest('tr'); await saveRecord('profiles', id, { role: row.querySelector('[data-client-role]').value }, 'User role'); }
-    if (button.dataset.action === 'toggle-course') await saveRecord('courses', id, { published: button.dataset.published !== 'true' }, 'Course publication');
-    if (button.dataset.action === 'toggle-affiliate') await saveRecord('affiliates', id, { approved: button.dataset.approved !== 'true' }, 'Affiliate approval');
-    if (button.dataset.action === 'save-payment') { const row = button.closest('tr'); await saveRecord('payments', id, { status: row.querySelector('[data-payment-status]').value }, 'Payment status'); }
+    if (button.dataset.action === 'save-ticket') { const row = button.closest('tr'); await saveRecord('support_tickets', id, { status: row.querySelector('[data-ticket-status]').value, priority: row.querySelector('[data-ticket-priority]').value }, 'Ticket', 'manage_tickets'); }
+    if (button.dataset.action === 'save-client') { const row = button.closest('tr'); await saveRecord('profiles', id, { role: row.querySelector('[data-client-role]').value }, 'User role', 'manage_users'); }
+    if (button.dataset.action === 'toggle-course') await saveRecord('courses', id, { published: button.dataset.published !== 'true' }, 'Course publication', 'manage_courses');
+    if (button.dataset.action === 'toggle-affiliate') await saveRecord('affiliates', id, { approved: button.dataset.approved !== 'true' }, 'Affiliate approval', 'manage_affiliates');
+    if (button.dataset.action === 'save-payment') { const row = button.closest('tr'); await saveRecord('payments', id, { status: row.querySelector('[data-payment-status]').value }, 'Payment status', 'manage_payments'); }
   });
   syncSession();
 })();
