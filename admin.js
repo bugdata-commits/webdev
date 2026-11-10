@@ -70,18 +70,25 @@
     return '';
   }
 
-  function renderTable(table) {
-    const config = tableConfig[table];
+  function getFilteredSortedRows(table) {
     const state = tableStates[table];
-    if (!config || !state) return;
+    if (!state) return [];
     const filtered = state.rows.filter((row) => searchable(row, table));
-    const sortKey = state.sortKey || config.defaultSort;
+    const sortKey = state.sortKey || tableConfig[table].defaultSort;
     filtered.sort((a, b) => {
       const av = valueForSort(a, sortKey); const bv = valueForSort(b, sortKey);
       if (av === bv) return 0;
       const result = av > bv ? 1 : -1;
       return state.direction === 'asc' ? result : -result;
     });
+    return filtered;
+  }
+
+  function renderTable(table) {
+    const config = tableConfig[table];
+    const state = tableStates[table];
+    if (!config || !state) return;
+    const filtered = getFilteredSortedRows(table);
     const pages = Math.max(1, Math.ceil(filtered.length / state.pageSize));
     state.page = Math.min(state.page, pages);
     const start = (state.page - 1) * state.pageSize;
@@ -92,6 +99,57 @@
     if (info) info.textContent = `${filtered.length ? start + 1 : 0}–${Math.min(start + state.pageSize, filtered.length)} of ${filtered.length}`;
     document.querySelector(`[data-page-prev="${table}"]`)?.toggleAttribute('disabled', state.page <= 1);
     document.querySelector(`[data-page-next="${table}"]`)?.toggleAttribute('disabled', state.page >= pages);
+  }
+
+  const exportTitles = { tickets: 'Support tickets', clients: 'Client records', courses: 'Courses', affiliates: 'Affiliate approvals', payments: 'Payment records' };
+  function exportRows(table) {
+    const rows = getFilteredSortedRows(table);
+    const mapped = rows.map((row) => {
+      if (table === 'tickets') { const profile = dashboardData.profileMap.get(row.client_id); return [
+        `BUG-${String(row.ticket_number).padStart(5, '0')}`, profile?.business_name || profile?.full_name || 'Unknown client', row.subject, row.priority, row.status.replaceAll('_', ' '), formatDate(row.updated_at || row.created_at)
+      ]; }
+      if (table === 'clients') return [row.full_name || 'Unnamed client', row.business_name || '', row.role, formatDate(row.created_at)];
+      if (table === 'courses') return [row.title || row.slug, row.published ? 'Published' : 'Draft', dashboardData.enrollmentCounts[row.id] || 0, formatDate(row.created_at)];
+      if (table === 'affiliates') return [row.referral_code, `${row.commission_rate}%`, row.approved ? 'Approved' : 'Pending', formatDate(row.created_at)];
+      const order = dashboardData.orderMap.get(row.order_id);
+      return [row.provider_reference || row.id.slice(0, 8), order?.description || row.order_id || '', `${row.amount} ${row.currency}`, row.status, formatDate(row.created_at)];
+    });
+    const headers = {
+      tickets: ['Ticket', 'Client', 'Subject', 'Priority', 'Status', 'Updated'],
+      clients: ['Name', 'Company', 'Role', 'Joined'],
+      courses: ['Course', 'Status', 'Enrolled', 'Created'],
+      affiliates: ['Referral code', 'Commission', 'Approval', 'Joined'],
+      payments: ['Reference', 'Order', 'Amount', 'Status', 'Created']
+    }[table];
+    return { title: exportTitles[table], headers, rows: mapped };
+  }
+
+  function safeFilename(value) { return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+  function csvCell(value) { const text = String(value ?? ''); return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text; }
+  function downloadBlob(blob, filename) { const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = filename; document.body.appendChild(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
+
+  function exportCsv(table) {
+    const report = exportRows(table);
+    if (!report) return;
+    const generated = new Date().toLocaleString();
+    const csv = [['Report', report.title], ['Generated', generated], [], report.headers, ...report.rows].map((row) => row.map(csvCell).join(',')).join('\r\n');
+    downloadBlob(new Blob([`\ufeff${csv}`], { type: 'text/csv;charset=utf-8' }), `${safeFilename(report.title)}-${new Date().toISOString().slice(0, 10)}.csv`);
+    setStatus(`Exported ${report.rows.length} ${report.title.toLowerCase()} to CSV.`);
+  }
+
+  function exportPdf(table) {
+    const report = exportRows(table);
+    const pdf = window.jspdf;
+    if (!report || !pdf?.jsPDF) { setStatus('PDF export library is unavailable. Please refresh and try again.', 'status priority'); return; }
+    const doc = new pdf.jsPDF({ orientation: 'landscape', unit: 'pt', format: 'a4' });
+    const generated = new Date().toLocaleString();
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(18); doc.text(`Bugdata — ${report.title}`, 40, 42);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(90); doc.text(`Generated ${generated} · ${report.rows.length} records · Filters and sorting applied from dashboard`, 40, 59);
+    doc.setTextColor(0);
+    if (typeof doc.autoTable !== 'function') { setStatus('PDF table plugin is unavailable. Please refresh and try again.', 'status priority'); return; }
+    doc.autoTable({ head: [report.headers], body: report.rows, startY: 78, theme: 'grid', styles: { font: 'helvetica', fontSize: 8, cellPadding: 5 }, headStyles: { fillColor: [16, 42, 47], textColor: [255, 255, 255] }, alternateRowStyles: { fillColor: [241, 248, 246] }, margin: { left: 40, right: 40 } });
+    doc.save(`${safeFilename(report.title)}-${new Date().toISOString().slice(0, 10)}.pdf`);
+    setStatus(`Exported ${report.rows.length} ${report.title.toLowerCase()} to PDF.`);
   }
 
   function setupTables(data) {
@@ -188,6 +246,10 @@
     if (pageTable && tableStates[pageTable]) { tableStates[pageTable].pageSize = Number(event.target.value); tableStates[pageTable].page = 1; renderTable(pageTable); }
   });
   document.addEventListener('click', async (event) => {
+    const csvButton = event.target.closest('[data-export-csv]');
+    const pdfButton = event.target.closest('[data-export-pdf]');
+    if (csvButton) { exportCsv(csvButton.dataset.exportCsv); return; }
+    if (pdfButton) { exportPdf(pdfButton.dataset.exportPdf); return; }
     const prev = event.target.closest('[data-page-prev]');
     const next = event.target.closest('[data-page-next]');
     if (prev || next) { const table = (prev || next).dataset.pagePrev || (prev || next).dataset.pageNext; if (tableStates[table]) { tableStates[table].page += next ? 1 : -1; renderTable(table); } return; }
