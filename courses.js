@@ -151,7 +151,7 @@
   nav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => { nav.classList.remove('bd-open'); menu?.setAttribute('aria-expanded', 'false'); if (menu) menu.textContent = 'Menu'; }));
   const year = $('#bdYear'); if (year) year.textContent = new Date().getFullYear();
   if (client) {
-    client.auth.getSession().then(async ({ data }) => { user = data.session?.user || null; renderAuth(); const pending = localStorage.getItem(pendingKey); if (user && pending && catalog[pending]) { localStorage.removeItem(pendingKey); await persistCourseRequest(pending); } }).catch((error) => { console.error(error); setStatus('Could not reach the account service. Please retry when connected.', 'error'); });
+    client.auth.getSession().then(async ({ data }) => { user = data.session?.user || null; renderAuth(); setStatus(user ? 'Signed in. Request a course from the catalog to add its starter lessons.' : 'Sign in or create a student account to get started.', user ? 'success' : ''); const pending = localStorage.getItem(pendingKey); if (user && pending && catalog[pending]) { localStorage.removeItem(pendingKey); await persistCourseRequest(pending); } }).catch((error) => { console.error(error); setStatus('Could not reach the account service. Please retry when connected.', 'error'); });
     client.auth.onAuthStateChange((_event, session) => { user = session?.user || null; renderAuth(); });
   } else { setStatus('Student account service is unavailable. You can still review the course previews; registration needs the site account service.', 'error'); renderAuth(); }
 })();
