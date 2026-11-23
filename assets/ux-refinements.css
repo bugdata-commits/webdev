@@ -1,0 +1,6 @@
+
+.section-head h1 {
+  margin: 15px 0;
+  font: 600 clamp(2.1rem, 4vw, 3.5rem)/1.08 'Space Grotesk', sans-serif;
+  letter-spacing: -.055em;
+}
