@@ -1,6 +1,164 @@
+/* Bugdata interface refinements: clear hierarchy, dependable keyboard access and generous touch targets. */
+:root {
+  scroll-padding-top: 6.5rem;
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
+}
+
+::selection {
+  color: #071923;
+  background: #81e5cc;
+}
+
+:where(h1, h2, h3, h4) {
+  text-wrap: balance;
+}
+
+:where(p, li) {
+  text-wrap: pretty;
+}
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid #81e5cc;
+  outline-offset: 4px;
+  border-radius: 5px;
+}
+
+.nav-links a[aria-current="page"],
+.bd-links a[aria-current="page"] {
+  color: #81e5cc;
+  font-weight: 800;
+}
+
+.menu-btn,
+.bd-menu {
+  min-width: 44px;
+  min-height: 44px;
+  touch-action: manipulation;
+}
+
+.menu-btn:hover,
+.bd-menu:hover {
+  border-color: rgba(129, 229, 204, .62);
+  color: #81e5cc;
+}
+
+:target {
+  scroll-margin-top: 6.5rem;
+}
+
+/* Homepage feature index: numbered editorial cards, clear scan order, and restrained motion. */
+.home-links {
+  position: relative;
+  isolation: isolate;
+}
+
+.home-links .section-head {
+  max-width: 760px;
+  padding-left: clamp(1rem, 2vw, 1.5rem);
+  border-left: 2px solid rgba(129, 229, 204, .74);
+}
+
+.home-links .section-head h2 {
+  letter-spacing: -.045em;
+}
+
+.compact-links .service-card {
+  position: relative;
+  display: flex;
+  min-height: 220px;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: hidden;
+  padding: clamp(1.25rem, 2.4vw, 1.75rem);
+  border: 1px solid rgba(183, 235, 221, .2);
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(40, 86, 91, .54), rgba(12, 35, 42, .82));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .055);
+  transition: transform .24s ease, border-color .24s ease, box-shadow .24s ease;
+}
+
+.compact-links .service-card::after {
+  position: absolute;
+  top: -52px;
+  right: -48px;
+  width: 142px;
+  height: 142px;
+  border: 1px solid rgba(129, 229, 204, .12);
+  border-radius: 50%;
+  box-shadow: 0 0 0 18px rgba(129, 229, 204, .025), 0 0 0 38px rgba(129, 229, 204, .018);
+  content: "";
+  pointer-events: none;
+}
+
+.compact-links .service-card .num {
+  color: #81e5cc;
+  font: 700 .72rem/1.2 'Space Grotesk', sans-serif;
+  letter-spacing: .16em;
+}
+
+.compact-links .service-card h3 {
+  margin: 1.1rem 0 .55rem;
+  font: 600 clamp(1.1rem, 1.5vw, 1.3rem)/1.2 'Space Grotesk', sans-serif;
+  letter-spacing: -.025em;
+  text-wrap: balance;
+}
+
+.compact-links .service-card p {
+  max-width: 32ch;
+  color: #b8ccc7;
+  font-size: .9rem;
+  line-height: 1.6;
+}
+
+.compact-links .service-card b {
+  margin-top: auto;
+  padding-top: 1.35rem;
+  color: #81e5cc;
+  font-size: .82rem;
+  letter-spacing: .01em;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .compact-links .service-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(129, 229, 204, .48);
+    box-shadow: 0 20px 48px rgba(2, 14, 20, .28), inset 0 1px 0 rgba(255, 255, 255, .08);
+  }
+}
+
+@media (max-width: 600px) {
+  .compact-links .service-card {
+    min-height: 195px;
+  }
+}
 
 .section-head h1 {
   margin: 15px 0;
   font: 600 clamp(2.1rem, 4vw, 3.5rem)/1.08 'Space Grotesk', sans-serif;
   letter-spacing: -.055em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+
+  .compact-links .service-card {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid Highlight;
+  }
 }
