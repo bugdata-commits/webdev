@@ -1,0 +1,13 @@
+# Bugdata premium website refresh — TODO
+
+- [x] **Replace the rejected cosmic visual system across the public site.** Redesign the existing website into a genuinely premium experience informed by the deep comparison of other digital and marketing agency websites. Use a distinctive editorial direction grounded in Bugdata’s own identity and Zimbabwean context; do not copy another agency’s branding or layout. Remove the generic robot/cosmic-glass presentation. Keep the visual hierarchy clear, restrained and cohesive across all 13 public pages.
+
+- [x] **Use authentic, carefully selected local imagery.** Add the verified Harare photo and one properly licensed, appropriately described documentary people photo for planned placements; optimize them as local assets, add accurate captions/credit links, and ensure that illustrative people are not represented as Bugdata staff, clients or testimonials. Do not use watermarked or paid stock-search previews.
+
+- [x] **Preserve approved content and prices.** Keep Bugdata’s identity and previously approved content and pricing. The eligible Zimbabwe-domain website offer stays **$24.99**, the `.com` offer stays **$50**, and course fees stay **$100** and **$50**. Retain the rest of the published service, product, course, community, nature and support content and its prices; do not reintroduce the superseded `$224.99` price or invent missing units, claims or outcomes.
+
+- [x] **Preserve all existing functional behavior.** Do not change the student portal, sign-in/authentication, course requests/progress, forms, checkout/cart/payment paths, Supabase configuration or existing application scripts while redesigning. Existing routes, navigation links, in-page anchors, forms, mobile menus and third-party links must remain functional.
+
+- [x] **Preserve accessibility and responsive behavior.** Maintain semantic content, visible keyboard focus, accessible navigation labels, mobile menu/Escape handling, usable touch targets, reduced-motion support, legible contrast and no horizontal overflow at mobile widths. Visual content must have meaningful alternative text or remain decorative as appropriate.
+
+- [ ] **Verify and publish the finished website.** Check the public pages at desktop and mobile widths, confirm that pricing and route content remain intact, confirm no image/link/runtime failures or browser errors, and verify that existing interaction flows still work. Commit and push the approved redesign to `main`; confirm the GitHub Pages build for that revision before reporting the live URL.
