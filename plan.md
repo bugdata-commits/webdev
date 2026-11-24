@@ -1,42 +1,44 @@
-# Bugdata premium website refresh plan
+# Bugdata redesign iteration: supplied dark-tech concept
 
 ## Implementation approach
 
-Replace the current cosmic/glass visual layer with a warm editorial system that prioritizes Bugdata’s existing proposition, Zimbabwean context, real imagery, clear service groups, and straightforward next steps. Apply the system through the currently shared `assets/cosmic-interface.css` link target so all 13 public routes keep their existing page templates and scripts while receiving a consistent redesign. Restyle, but do not rebuild, the shared legacy route template and the four `bd-page` routes.
+Use the user's supplied standalone HTML as the visual reference for a new iteration, not as a drop-in site replacement. Its dark navy/cyan color system, technical grid, emphatic display headlines, section rhythm, and small status-like details will inform the existing static website. Adapt those ideas to the actual Bugdata page templates and routes rather than copying the prototype's one-page structure, unsupported copy, contact details, or mailto form.
 
-Rework the homepage hero from a robot/video background into an editorial two-column composition using a locally stored, properly attributed documentary photo. Add a separate local Harare image to the home story sequence with accurate caption and photographer credit. Use no decorative image as false evidence of a Bugdata client, staff member, or outcome. Keep the remaining pages’ content, section anchors, navigation, metadata, scripts, prices, forms, portal and checkout paths intact. No new framework, package, database, or service is required. Optimize selected source images as WebP without changing aspect ratio or content.
+Restyle the homepage into a clear, branded landing experience that points into Bugdata's existing services, pricing, student portal, community, nature and support pages. Apply a coherent visual system through `assets/cosmic-interface.css` so legacy shared pages and the four `bd-page` pages receive the same theme while preserving their existing markup, links, scripts and forms. Preserve responsive focus states, mobile navigation and Escape behavior using the existing `assets/ux-refinements.css` and `.js`.
+
+Retain locally stored and credited Harare and illustrative people photographs where they fit the revised art direction. The prototype's abstract orb/grid motif may be used as a secondary visual detail, not as the only or dominant proof of Bugdata's work. Use no invented client evidence, staff identity, metrics, or outcome claims.
 
 ## Design direction
 
-**Design movement:** Contemporary editorial studio design with a field-notes sensibility: clear hierarchy, asymmetrical image-and-copy pairings, generous paper-like space and disciplined typographic contrast. It borrows principles—not recognizable compositions—from the comparison sites.
+**Design movement:** Technical editorial with a Zimbabwean field-notes perspective: a deep instrument-panel canvas, hard-working type, and a few clear data-like markers—not generic futuristic effects.
 
-**Core principles:** (1) make the offer and next action obvious; (2) use place and people imagery deliberately, with honest credits and no implied endorsements; (3) let evidence and artifacts support the story; (4) prioritize readable rhythm, accessible controls and calm over effects.
+**Core principles:** (1) make the company, services and next action obvious; (2) balance the supplied high-energy dark visual with genuine Bugdata context; (3) distinguish projects, illustrative images and concepts honestly; (4) keep the multi-page experience legible, responsive and accessible.
 
-**Color philosophy:** Warm paper and ink create a human, considered base. Bugdata’s existing teal/mint identity becomes a deeper, more restrained green for links and actions; a small clay/saffron accent helps draw attention to decisions without turning the interface neon. Keep the existing logo asset and avoid the prior blue-violet orbital effect.
+**Color philosophy:** Use deep ink/navy as a confident digital canvas. Electric blue and cyan are reserved for actions, data marks and focus. Keep large text near-white and body text muted but legible. Avoid glowing gradients across every surface; allow occasional lighter content stages to create rhythm.
 
-**Layout paradigm:** Editorial split layouts and staggered, full-width sections replace repeated centered hero/card sequences. Keep service and price content easy to scan; use cards only where the existing information is truly a set of comparable offers. Maintain a compact, clear header and a direct project-enquiry route.
+**Layout paradigm:** Preserve the actual page routes and use the supplied concept's bold hero, ordered service index, concise process and training sections as homepage patterns. Keep service details, prices, portal access and support within their proper existing routes. Prefer asymmetrical image/copy compositions over repeated centered panels.
 
-**Signature elements:** (1) fine ruled lines and index-like labels that echo data notebooks; (2) documentary photo frames with small, visible credits; (3) oversized headline typography paired with concise serif or restrained humanist text.
+**Signature elements:** (1) a fine technical grid or line motif used sparingly; (2) compact numbered/labelled section markers; (3) a structured, data-inspired hero visual paired with locally grounded photography.
 
-**Interaction and animation:** Preserve familiar anchors and navigation. Keep motion subtle and non-essential, with focus-visible states, mobile touch targets, Escape behavior and reduced-motion support intact. No interaction may obscure content or require animation to read it.
+**Interaction and animation:** Reuse functioning nav, forms, portal and checkout. Keep hover and reveal motion subtle and nonessential; use visible focus, touch-sized menu controls, Escape close, and reduced-motion rules. Don't hide critical content before JavaScript runs.
 
-**Typography system:** A confident display sans for headlines; a highly legible humanist sans for UI and body copy; optional editorial serif only for select short quotations or emphasis. Use the existing Google Fonts where practical to avoid adding dependencies, and ensure robust system fallbacks.
+**Typography system:** Use the existing DM Sans and Space Grotesk assets where supported, with robust system fallbacks. Use a compressed, bold display scale for short statements and a calmer readable body scale for dense service and course content.
 
 **Brand essence:** Bugdata turns data and digital tools into practical business and community capability. Personality: grounded, inventive, generous. Voice: plain-spoken, ambitious and concrete. Example lines: “Make digital work. Build with purpose.” and “Technology should move real work forward.”
 
-**Wordmark and mark:** Retain the supplied Bugdata logo and name treatment; do not introduce a substitute logo. Use the geometric logo as a small brand anchor rather than enlarging it into a decorative hero object.
+**Wordmark and mark:** Keep Bugdata's supplied logo/wordmark; do not replace it with the prototype's unapproved text treatment.
 
-**Signature brand color:** Restrained deep teal-green derived from the existing logo, with the mint and purple retained only as minor supporting brand cues where needed.
+**Signature brand color:** Bugdata deep green/teal remains the ownable brand cue; electric blue/cyan from the supplied reference is a supporting interaction color.
 
 ## Project structure and responsibilities
 
-- Root `*.html`: the 13 public static pages, navigation, content, metadata, forms and route-specific markup.
-- `assets/cosmic-interface.css`: shared visual-system override file linked across the routes; replace its contents with the new editorial system while retaining its path to avoid risky multi-page link edits.
-- `assets/brand-pages.css`: existing base layout for the four `bd-page` pages; leave behavior and structural rules in place and layer the shared visual system over it.
-- `assets/ux-refinements.css` and `assets/ux-refinements.js`: existing accessibility, keyboard, responsive and reduced-motion refinements; preserve and verify them.
-- `assets/images/`: optimized local copies of the selected Unsplash photography, plus a small attribution note if useful.
-- `courses.js`, `cart.js`, `admin.js`, `portal.js`, `supabase/` and their adjacent pages: existing course/student/auth/checkout functionality; no changes planned.
+- Root `*.html`: existing public pages, routes, SEO, navigation, prices, forms, portal and business content. Update the homepage markup only where needed to make the reference work with Bugdata's identity and current page routes.
+- `assets/cosmic-interface.css`: shared visual system for existing legacy and `bd-page` templates.
+- `assets/brand-pages.css`: existing source rules for brand pages; retain behavior and use shared overrides for cohesive appearance.
+- `assets/ux-refinements.css` and `assets/ux-refinements.js`: keyboard, navigation and accessibility support; preserve and test.
+- `assets/images/`: existing locally hosted, licensed, credited images.
+- `courses.js`, `cart.js`, `admin.js`, `portal.js`, `supabase-config.js`, `portal.css`, and `supabase/`: existing application/authentication/checkout code; do not change.
 
 ## Material constraints
 
-The site is static HTML/CSS/JavaScript on GitHub Pages. Keep existing routes and file names; do not introduce new hosting or JavaScript dependencies. Keep all already-approved page content and USD prices. Explicitly preserve the eligible Zimbabwean-domain website offer at $24.99, the `.com` offer at $50, and course prices of $100 and $50. Do not alter portal/authentication, forms, checkout, scripts or their data flows. Avoid fabricated clients, testimonials, awards, metrics, local identity for stock people, or promises of outcomes. Research comparison will be completed and the report/notes updated before final commit.
+The input is a single-page concept and cannot replace this 13-page website without dropping working functionality and approved content. Do not replace existing Bugdata navigation with in-page-only links. Do not introduce the supplied prototype's email form or contact numbers as new canonical functionality. Preserve the website offers at $24.99 for eligible Zimbabwean-domain websites and $50 for .com, and course fees of $100 and $50. Retain all existing price and scope content, portal/auth, forms, checkout/cart/payment, Supabase configuration, URLs and scripts. Leave the currently published version unchanged while this iteration is under review; publish only after the user approves the adapted result.
