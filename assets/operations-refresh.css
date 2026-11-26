@@ -240,3 +240,23 @@ select:focus-visible, summary:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
+
+/* Keep the expanded mobile menu aligned with the light site theme and readable. */
+@media (max-width: 980px) {
+  .nav-links.open, .bd-links.bd-open {
+    background: #fff !important;
+    color: #193934 !important;
+    border-bottom: 1px solid rgba(42,85,91,.16) !important;
+    box-shadow: 0 12px 24px rgba(24,58,48,.08);
+  }
+  .nav-links.open a, .bd-links.bd-open a {
+    color: #193934 !important;
+    border-bottom-color: rgba(42,85,91,.14) !important;
+  }
+  .nav-links.open a:hover, .nav-links.open a:focus-visible,
+  .nav-links.open a[aria-current="page"],
+  .bd-links.bd-open a:hover, .bd-links.bd-open a:focus-visible,
+  .bd-links.bd-open a[aria-current="page"] {
+    color: #2a706e !important;
+  }
+}
