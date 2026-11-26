@@ -260,3 +260,70 @@ select:focus-visible, summary:focus-visible {
     color: #2a706e !important;
   }
 }
+
+/* Full-bleed homepage hero: user-supplied image behind the original copy and CTAs. */
+#home.hero {
+  position: relative !important;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex !important;
+  align-items: center;
+  min-height: min(760px, calc(100svh - 78px)) !important;
+  padding: clamp(58px, 8vw, 104px) 0 !important;
+  background: #071522 !important;
+}
+#home .hero-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 48%;
+}
+#home .hero-image-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(5,17,29,.84) 0%, rgba(5,17,29,.74) 28%, rgba(5,17,29,.50) 52%, rgba(5,17,29,.22) 74%, rgba(5,17,29,.12) 100%), linear-gradient(0deg, rgba(5,17,29,.28), transparent 42%, rgba(5,17,29,.08));
+}
+#home .hero-grid {
+  position: relative;
+  z-index: 2;
+  display: block !important;
+  width: min(var(--max),calc(100% - 40px));
+}
+#home .hero-content { max-width: 720px; }
+#home .ops-signal { color: #a9f0df !important; }
+#home.hero h1 { color: #fff !important; }
+#home.hero .hero-copy { color: #edf5f4 !important; }
+#home .micro-proof { color: #e1ece9 !important; }
+#home .signal { background: #78d8c5 !important; }
+#home .hero-image-note {
+  position: absolute;
+  right: clamp(16px,4vw,42px);
+  bottom: 14px;
+  z-index: 2;
+  color: rgba(255,255,255,.88);
+  font-size: .72rem;
+  letter-spacing: .02em;
+  text-shadow: 0 1px 8px rgba(0,0,0,.55);
+}
+@media (max-width: 760px) {
+  #home.hero {
+    min-height: max(660px, calc(100svh - 70px)) !important;
+    padding: 58px 0 68px !important;
+  }
+  #home .hero-grid { width: min(var(--max),calc(100% - 32px)); }
+  #home .hero-background { object-position: 51% center; }
+  #home .hero-image-scrim {
+    background: linear-gradient(180deg, rgba(5,17,29,.82) 0%, rgba(5,17,29,.76) 54%, rgba(5,17,29,.68) 100%), linear-gradient(90deg, rgba(5,17,29,.3), transparent 75%);
+  }
+  #home .hero-content { max-width: 620px; }
+}
+@media (max-width: 420px) {
+  #home .hero-background { object-position: 50% center; }
+  #home.hero h1 { font-size: clamp(2.55rem,12vw,3.2rem) !important; }
+}
