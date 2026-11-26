@@ -347,3 +347,74 @@ select:focus-visible, summary:focus-visible {
 /* Keep the dark brand-page hero title readable after shared heading colors are applied. */
 .bd-hero .bd-title { color: #fff !important; }
 .bd-hero .bd-title .accent { color: #a9f0df !important; -webkit-text-fill-color: #a9f0df !important; }
+
+/* Persistent account and cart utilities, modeled around Bugdata's existing client portal. */
+.header-utility {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+.header-account,
+.header-cart {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: #193934 !important;
+  font-size: .86rem;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none !important;
+  white-space: nowrap;
+  transition: background-color .18s ease, color .18s ease;
+}
+.header-account:hover,
+.header-cart:hover { background: #eaf2ed; color: #2a555b !important; }
+.header-cart svg {
+  width: 19px;
+  height: 19px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+.header-cart .cart-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: #2a555b;
+  color: #fff;
+  font-size: .68rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.header-cart .cart-count[hidden] { display: none; }
+.hero-cta { min-height: 54px; padding-inline: 23px; font-size: 1rem; }
+.hero-cta-note { margin: -7px 0 17px; max-width: 480px; color: #e1ece9; font-size: .86rem; line-height: 1.5; }
+@media (max-width: 980px) {
+  .header-utility { gap: 2px; }
+  .header-account, .header-cart { min-height: 42px; padding-inline: 8px; }
+  .header-utility .nav-cta, .header-utility .bd-nav-cta { display: none !important; }
+}
+@media (max-width: 560px) {
+  .nav-inner, .bd-nav-inner { gap: 7px !important; }
+  .header-utility { gap: 0; }
+  .header-account, .header-cart { gap: 5px; padding-inline: 7px; font-size: .78rem; }
+  .header-cart svg { width: 17px; height: 17px; }
+}
+@media (max-width: 360px) {
+  .brand { gap: 6px; font-size: 1.16rem; }
+  .brand small { letter-spacing: .12em; }
+  .header-account { padding-inline: 5px; }
+}

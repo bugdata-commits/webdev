@@ -91,7 +91,7 @@ body{background-image:linear-gradient(rgba(7,25,35,.84),rgba(7,25,35,.9)),url('a
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
-  <header class="nav"><div class="wrap nav-inner"><a class="brand" href="index.html" aria-label="Bugdata home"><img class="brand-logo" src="assets/bugdata-logo.png" alt="Bugdata Investments logo" width="48" height="52"><span>BUGDATA<small>PROCESS · SYSTEMS · GROWTH</small></span></a><nav class="nav-links" id="navLinks" aria-label="Main navigation"><a href="solutions.html">Solutions</a><a href="process.html">How it works</a><a href="website-design.html">Pricing</a><a href="community.html">Community &amp; environment</a><a href="support.html">Client support</a></nav><a class="btn btn-primary btn-small nav-cta" href="start-project.html">Start a project ↗</a><button class="menu-btn" id="menuBtn" aria-label="Open navigation" aria-expanded="false" type="button" aria-controls="navLinks">☰</button></div></header>
+  <header class="nav"><div class="wrap nav-inner"><a class="brand" href="index.html" aria-label="Bugdata home"><img class="brand-logo" src="assets/bugdata-logo.png" alt="Bugdata Investments logo" width="48" height="52"><span>BUGDATA<small>PROCESS · SYSTEMS · GROWTH</small></span></a><nav class="nav-links" id="navLinks" aria-label="Main navigation"><a href="solutions.html">Solutions</a><a href="process.html">How it works</a><a href="website-design.html">Pricing</a><a href="community.html">Community &amp; environment</a><a href="support.html">Client support</a></nav><div class="header-utility"><a class="header-account" href="support.html#account" aria-label="Sign in or create a Bugdata client account">Sign in</a><a class="header-cart" href="support.html#cart" aria-label="View cart, 0 items"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M3 4h2l2.1 10.1a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 1.9-1.4L22 8H6"/><circle cx="10" cy="20" r="1.25"/><circle cx="18" cy="20" r="1.25"/></svg><span>Cart</span><span class="cart-count" data-cart-count hidden>0</span></a><a class="btn btn-primary btn-small nav-cta" href="start-project.html">Start a project ↗</a></div><button class="menu-btn" id="menuBtn" aria-label="Open navigation" aria-expanded="false" type="button" aria-controls="navLinks">☰</button></div></header>
 <main id="main">
   <section class="hero" id="home">
     <img class="hero-background" src="assets/images/bugdata-hero-github-upload.webp" alt="" aria-hidden="true" width="1672" height="941" fetchpriority="high" decoding="async">
@@ -102,9 +102,10 @@ body{background-image:linear-gradient(rgba(7,25,35,.84),rgba(7,25,35,.9)),url('a
         <h1>Find the work costing you time.</h1>
         <p class="hero-copy">Bugdata helps local businesses spot operational friction and build a better way to run the work—connecting people, process and useful technology into one operating system.</p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="start-project.html#builder">Talk through a workflow <span aria-hidden="true">↗</span></a>
+          <a class="btn btn-primary hero-cta" href="start-project.html#builder">Start a project <span aria-hidden="true">↗</span></a>
           <a class="btn btn-ghost" href="process.html">How we work</a>
         </div>
+        <p class="hero-cta-note">Share one repetitive or stalled workflow. We’ll help define a practical next step.</p>
         <div class="micro-proof"><span><i class="signal" aria-hidden="true"></i>Process first. Tools second.</span><span>Built around your business—not a trend.</span></div>
       </div>
     </div>
@@ -152,5 +153,6 @@ const form=document.getElementById('projectForm');if(form){const checks=[...docu
 
 
   <script src="assets/ux-refinements.js" defer></script>
+  <script src="assets/cart-header.js" defer></script>
 </body>
 </html>
