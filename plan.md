@@ -1,44 +1,46 @@
-# Bugdata redesign iteration: supplied dark-tech concept
+# Bugdata website iteration: operating systems that reduce operational waste
 
 ## Implementation approach
 
-Use the user's supplied standalone HTML as the visual reference for a new iteration, not as a drop-in site replacement. Its dark navy/cyan color system, technical grid, emphatic display headlines, section rhythm, and small status-like details will inform the existing static website. Adapt those ideas to the actual Bugdata page templates and routes rather than copying the prototype's one-page structure, unsupported copy, contact details, or mailto form.
+Continue in the existing static multi-page website and repository. Make the homepage the clearest statement of Bugdata’s shift from a list of digital tools toward identifying operational friction, designing a better way of working, implementing an end-to-end operating system, and agreeing how results will be measured. Put all five requested positioning pillars on the homepage in plain language. Use assessment and measurement language; do not invent case studies, savings figures, headcount reductions, revenue gains, ROI guarantees, or delivery deadlines.
 
-Restyle the homepage into a clear, branded landing experience that points into Bugdata's existing services, pricing, student portal, community, nature and support pages. Apply a coherent visual system through `assets/cosmic-interface.css` so legacy shared pages and the four `bd-page` pages receive the same theme while preserving their existing markup, links, scripts and forms. Preserve responsive focus states, mobile navigation and Escape behavior using the existing `assets/ux-refinements.css` and `.js`.
+Reframe the Solutions page around practical operating needs and describe AI as one optional enabler. Rework the existing AI/automation route into a page about process design and workflow automation, retaining its URL, examples, links, and enquiry routing. Align the existing process and project enquiry pages so they ask about workflows and desired outcomes, while keeping service values and WhatsApp handling compatible. Keep all other routes, forms, portal/authentication, checkout/cart/payment, prices, Supabase configuration and application scripts intact.
 
-Retain locally stored and credited Harare and illustrative people photographs where they fit the revised art direction. The prototype's abstract orb/grid motif may be used as a secondary visual detail, not as the only or dominant proof of Bugdata's work. Use no invented client evidence, staff identity, metrics, or outcome claims.
+Use the existing locally hosted photographs and Bugdata logo; do not add generic tech stock imagery. Add one shared design layer after the current CSS that removes the prior cosmic/robot-futuristic appearance in favor of a bright, quiet, Spaceship-inspired product-services structure: concise sections, strong hierarchy, generous whitespace, subtle lines, visible navigation, simple cards, direct calls to action, and restrained motion. The palette remains rooted in the actual Bugdata teal, with its existing mint/cyan and violet logo colors as measured accents. Keep existing accessibility refinements, focus visibility, responsive navigation, Escape close, reduced-motion support and route anchors.
+
+A small optional on-page estimate may help a business quantify the current labor cost tied to repeat work. It must be user-entered, clearly illustrative, locally calculated, and explicitly not presented as recoverable savings or a forecast of ROI. No submitted data or new backend integration is needed.
 
 ## Design direction
 
-**Design movement:** Technical editorial with a Zimbabwean field-notes perspective: a deep instrument-panel canvas, hard-working type, and a few clear data-like markers—not generic futuristic effects.
+**Design movement:** Spaceship-inspired clarity for practical business services, adapted to Bugdata rather than copied: a restrained, bright interface with simple navigation, crisp section labels, editorial typography, candid local context and clear next actions.
 
-**Core principles:** (1) make the company, services and next action obvious; (2) balance the supplied high-energy dark visual with genuine Bugdata context; (3) distinguish projects, illustrative images and concepts honestly; (4) keep the multi-page experience legible, responsive and accessible.
+**Core principles:** (1) Lead with operational outcomes, not a technology list. (2) Explain the method before naming tools. (3) Make unverified impact measurable rather than promised. (4) Keep the site calm, legible, responsive and connected to the real Bugdata brand and Zimbabwean business context.
 
-**Color philosophy:** Use deep ink/navy as a confident digital canvas. Electric blue and cyan are reserved for actions, data marks and focus. Keep large text near-white and body text muted but legible. Avoid glowing gradients across every surface; allow occasional lighter content stages to create rhythm.
+**Color philosophy:** A warm near-white canvas and dark ink make the service content feel open and dependable. The logo’s deep teal anchors navigation and primary actions; mint/cyan and violet are small identity accents only. Cards and dividers stay quiet so the copy—not glowing effects—carries the message.
 
-**Layout paradigm:** Preserve the actual page routes and use the supplied concept's bold hero, ordered service index, concise process and training sections as homepage patterns. Keep service details, prices, portal access and support within their proper existing routes. Prefer asymmetrical image/copy compositions over repeated centered panels.
+**Layout paradigm:** A direct hero with a human image and one principal CTA leads into the operational problem, five short positioning pillars, a measured process, supporting services and the company’s learning/community commitments. Keep detail and transactions on their established pages.
 
-**Signature elements:** (1) a fine technical grid or line motif used sparingly; (2) compact numbered/labelled section markers; (3) a structured, data-inspired hero visual paired with locally grounded photography.
+**Signature elements:** (1) A slim numbered five-pillar index. (2) A simple Map → Design → Build → Deploy → Support route. (3) Compact measurement notes that distinguish an estimate or goal from a verified result.
 
-**Interaction and animation:** Reuse functioning nav, forms, portal and checkout. Keep hover and reveal motion subtle and nonessential; use visible focus, touch-sized menu controls, Escape close, and reduced-motion rules. Don't hide critical content before JavaScript runs.
+**Interaction and animation:** Keep existing navigation, enquiry submission, portal, course, checkout/cart/payment and support interactions untouched. The illustrative labor-cost estimator uses only local form inputs and updates an accessible live result; it neither submits nor stores data. Hover/motion is subtle and never required to understand the page. Maintain visible keyboard focus, Escape/mobile-menu behavior, usable touch targets and reduced-motion support.
 
-**Typography system:** Use the existing DM Sans and Space Grotesk assets where supported, with robust system fallbacks. Use a compressed, bold display scale for short statements and a calmer readable body scale for dense service and course content.
+**Typography system:** Retain DM Sans for clear body copy and Space Grotesk for concise headlines and numeric labels, with system fallbacks. Use short line lengths, a restrained heading scale and comfortable body spacing.
 
-**Brand essence:** Bugdata turns data and digital tools into practical business and community capability. Personality: grounded, inventive, generous. Voice: plain-spoken, ambitious and concrete. Example lines: “Make digital work. Build with purpose.” and “Technology should move real work forward.”
+**Brand essence:** Bugdata helps Zimbabwean businesses find avoidable operational work and build practical systems around the way the business needs to run. Personality: grounded, resourceful, accountable. Voice: candid, practical, non-hype. Example lines: “Find the work costing you time.” and “Map the process. Build what the process needs.”
 
-**Wordmark and mark:** Keep Bugdata's supplied logo/wordmark; do not replace it with the prototype's unapproved text treatment.
+**Wordmark and mark:** Preserve the supplied Bugdata logo and wordmark; do not substitute a text-only logo or another company’s identity.
 
-**Signature brand color:** Bugdata deep green/teal remains the ownable brand cue; electric blue/cyan from the supplied reference is a supporting interaction color.
+**Signature brand color:** Bugdata deep teal, sampled from the existing logo; retain the existing mint/cyan and violet logo accents sparingly.
 
 ## Project structure and responsibilities
 
-- Root `*.html`: existing public pages, routes, SEO, navigation, prices, forms, portal and business content. Update the homepage markup only where needed to make the reference work with Bugdata's identity and current page routes.
-- `assets/cosmic-interface.css`: shared visual system for existing legacy and `bd-page` templates.
-- `assets/brand-pages.css`: existing source rules for brand pages; retain behavior and use shared overrides for cohesive appearance.
-- `assets/ux-refinements.css` and `assets/ux-refinements.js`: keyboard, navigation and accessibility support; preserve and test.
-- `assets/images/`: existing locally hosted, licensed, credited images.
-- `courses.js`, `cart.js`, `admin.js`, `portal.js`, `supabase-config.js`, `portal.css`, and `supabase/`: existing application/authentication/checkout code; do not change.
+- Root `*.html`: the existing 14 pages, route metadata, navigation, product/pricing content, forms, portal and application behavior. Edit homepage, Solutions, workflow/automation, process and project-enquiry copy in place.
+- `assets/operations-refresh.css`: shared simple/light visual layer loaded after existing stylesheets; keeps layouts and behavior, adds the home positioning component styles, and harmonizes shared public-page components.
+- `assets/ux-refinements.css` and `assets/ux-refinements.js`: retain existing keyboard, mobile navigation, focus and reduced-motion support.
+- `assets/images/`, `assets/bugdata-logo.png`: existing approved/captioned imagery and identity assets.
+- `courses.js`, `cart.js`, `admin.js`, `portal.js`, `supabase-config.js`, `portal.css`, payment-related pages, and `supabase/`: existing application, authentication and checkout paths; do not alter.
+- `manus-routes.json`: complete static page route inventory used while previewing; keep it synchronized with root HTML pages.
 
 ## Material constraints
 
-The input is a single-page concept and cannot replace this 13-page website without dropping working functionality and approved content. Do not replace existing Bugdata navigation with in-page-only links. Do not introduce the supplied prototype's email form or contact numbers as new canonical functionality. Preserve the website offers at $24.99 for eligible Zimbabwean-domain websites and $50 for .com, and course fees of $100 and $50. Retain all existing price and scope content, portal/auth, forms, checkout/cart/payment, Supabase configuration, URLs and scripts. Leave the currently published version unchanged while this iteration is under review; publish only after the user approves the adapted result.
+The live release at `20a59068394548a765fb950dae95fd5e4c645e47` must remain unchanged during this review. Do not commit, push, create a checkpoint or publish this iteration until DOAZ explicitly approves it. Preserve the eligible Zimbabwe-domain website offer at **$24.99**, the `.com` offer at **$50**, and course fees at **$100** and **$50**. Retain existing route paths, in-page anchors, navigation, forms, portal/authentication, course access/progress, checkout/cart/payment paths, Supabase configuration, and existing application scripts. Do not claim Bugdata is exclusively an AI company; do not guarantee savings, ROI, revenue, headcount changes or delivery speed without verified evidence. No external research is needed for this user-directed update.

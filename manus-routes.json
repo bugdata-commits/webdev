@@ -1,0 +1,60 @@
+{
+  "routes": [
+    {
+      "path": "/",
+      "title": "Home"
+    },
+    {
+      "path": "/admin.html",
+      "title": "Admin Management — Bugdata"
+    },
+    {
+      "path": "/ai-automation.html",
+      "title": "Workflow Design Business Automation | Bugdata Investments"
+    },
+    {
+      "path": "/community.html",
+      "title": "Ubuntu Community Partnerships | Bugdata"
+    },
+    {
+      "path": "/courses.html",
+      "title": "Digital Skills Courses Student Portal | Bugdata"
+    },
+    {
+      "path": "/faq.html",
+      "title": "Frequently Asked Questions | Bugdata Investments"
+    },
+    {
+      "path": "/hosting.html",
+      "title": "Hosting Options for Websites Apps | Bugdata Investments"
+    },
+    {
+      "path": "/nature.html",
+      "title": "Nature, Biodiversity Climate | Bugdata"
+    },
+    {
+      "path": "/our-work.html",
+      "title": "Selected Work Product Concepts | Bugdata Investments"
+    },
+    {
+      "path": "/process.html",
+      "title": "How Bugdata Builds Operating Systems | Bugdata Investments"
+    },
+    {
+      "path": "/solutions.html",
+      "title": "Business Systems & Digital Services | Bugdata Investments"
+    },
+    {
+      "path": "/start-project.html",
+      "title": "Discuss a Project | Bugdata Investments"
+    },
+    {
+      "path": "/support.html",
+      "title": "Bugdata Client Support"
+    },
+    {
+      "path": "/website-design.html",
+      "title": "Services Product Pricing | Bugdata Investments"
+    }
+  ]
+}
