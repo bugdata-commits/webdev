@@ -327,3 +327,23 @@ select:focus-visible, summary:focus-visible {
   #home .hero-background { object-position: 50% center; }
   #home.hero h1 { font-size: clamp(2.55rem,12vw,3.2rem) !important; }
 }
+
+/* Conversion-focused homepage: make the first few decisions quick and legible. */
+#services .service-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+#services .service-card { display:flex; flex-direction:column; min-height:245px; text-decoration:none; }
+#services .service-card .tag { margin-top:auto; align-self:flex-start; }
+.quick-method { display:grid; grid-template-columns:.85fr 1.15fr; align-items:center; gap:clamp(28px,6vw,76px); }
+.quick-method h2, .compact-impact h2 { font:600 clamp(2rem,4vw,3rem)/1.08 'Space Grotesk',sans-serif; letter-spacing:-.05em; margin:12px 0; color:#193934; }
+.quick-method-steps { list-style:none; padding:0; margin:0; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.quick-method-steps li { min-height:128px; padding:20px 16px; border-left:2px solid #78d8c5; background:#fff; }
+.quick-method-steps b, .quick-method-steps span { display:block; }
+.quick-method-steps b { color:#193934; font:650 1.1rem 'Space Grotesk',sans-serif; margin-bottom:8px; }
+.quick-method-steps span { color:#526760; font-size:.88rem; line-height:1.45; }
+.compact-impact { display:flex; justify-content:space-between; gap:24px; align-items:center; }
+.compact-impact > div { max-width:700px; }
+.compact-impact .btn { flex:0 0 auto; }
+#home + .ops-ticker .wrap { padding-block:11px; }
+@media(max-width:760px) { #services .service-grid { grid-template-columns:1fr; } .quick-method { grid-template-columns:1fr; gap:18px; } .quick-method-steps { grid-template-columns:1fr; } .quick-method-steps li { min-height:0; padding:15px 16px; } .compact-impact { align-items:flex-start; flex-direction:column; } }
+/* Keep the dark brand-page hero title readable after shared heading colors are applied. */
+.bd-hero .bd-title { color: #fff !important; }
+.bd-hero .bd-title .accent { color: #a9f0df !important; -webkit-text-fill-color: #a9f0df !important; }
