@@ -13,6 +13,7 @@
   };
   const client=hasSupabase?window.supabase.createClient(window.BUGDATA_SUPABASE_URL,window.BUGDATA_SUPABASE_PUBLISHABLE_KEY,{global:{fetch:timeoutFetch}}):null;
   const setAuthStatus=(message,kind='')=>{const el=document.getElementById('authStatus');if(el){el.textContent=message;el.className='notice '+kind}};
+  const authFailureText=(action,error)=>timedOutRequests.has(error)?`${action} timed out. Check your connection before trying again.`:`${action} failed: ${error?.message||'a network error occurred'}. Check your connection and try again.`;
   const authForms=[...document.querySelectorAll('form[data-demo-form="auth"]')];
   const ticketForm=document.querySelector('form[data-demo-form="ticket"]');
   const userEmail=document.getElementById('signedInEmail');
@@ -38,7 +39,14 @@
   if(client){
     syncSession();
     client.auth.onAuthStateChange((_event,session)=>{if(session)loadTickets(session.user);syncSession()});
-    if(authForms[0])authForms[0].addEventListener('submit',async e=>{e.preventDefault();const email=document.getElementById('signin-email').value.trim(),password=document.getElementById('signin-password').value;const {error}=await client.auth.signInWithPassword({email,password});if(error)setAuthStatus(error.message,'status priority');else toast('Signed in successfully.')});
+    if(authForms[0])authForms[0].addEventListener('submit',async e=>{
+      e.preventDefault();const form=e.currentTarget,button=form.querySelector('button[type="submit"]');if(button?.disabled)return;
+      const email=document.getElementById('signin-email').value.trim(),password=document.getElementById('signin-password').value,originalButtonText=button?.textContent;
+      if(button){button.disabled=true;button.textContent='Signing in…'}form.setAttribute('aria-busy','true');setAuthStatus('Signing in…','');
+      try{const {error}=await client.auth.signInWithPassword({email,password});if(error){setAuthStatus(error.message,'status priority');return}setAuthStatus(`Signed in as ${email}.`,'');if(userEmail)userEmail.textContent=email;}
+      catch(error){setAuthStatus(authFailureText('Sign-in',error),'status priority')}
+      finally{form.removeAttribute('aria-busy');if(button){button.disabled=false;button.textContent=originalButtonText}}
+    });
     if(authForms[1])authForms[1].addEventListener('submit',async e=>{
       e.preventDefault();
       const form=e.currentTarget,button=form.querySelector('button[type="submit"]');
@@ -62,7 +70,14 @@
         form.removeAttribute('aria-busy');if(button){button.disabled=false;button.textContent=originalButtonText}
       }
     });
-    if(authForms[2])authForms[2].addEventListener('submit',async e=>{e.preventDefault();const email=document.getElementById('reset-email').value.trim();const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+window.location.pathname});if(error)setAuthStatus(error.message,'status priority');else toast('Password reset instructions requested.')});
+    if(authForms[2])authForms[2].addEventListener('submit',async e=>{
+      e.preventDefault();const form=e.currentTarget,button=form.querySelector('button[type="submit"]');if(button?.disabled)return;
+      const email=document.getElementById('reset-email').value.trim(),originalButtonText=button?.textContent;
+      if(button){button.disabled=true;button.textContent='Sending…'}form.setAttribute('aria-busy','true');setAuthStatus('Requesting password reset instructions…','');
+      try{const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+window.location.pathname});if(error){setAuthStatus(error.message,'status priority');return}setAuthStatus('If an account matches this email, password reset instructions have been requested. Check your inbox and Spam/Junk.','');}
+      catch(error){setAuthStatus(authFailureText('Password reset',error),'status priority')}
+      finally{form.removeAttribute('aria-busy');if(button){button.disabled=false;button.textContent=originalButtonText}}
+    });
     if(ticketForm)ticketForm.addEventListener('submit',async e=>{e.preventDefault();const {data:{user}}=await client.auth.getUser();if(!user){setAuthStatus('Please sign in before submitting a ticket.','status priority');return}const payload={client_id:user.id,subject:document.getElementById('ticket-subject').value.trim(),category:document.getElementById('ticket-category').value,priority:document.getElementById('ticket-priority').value.toLowerCase().split(' ')[0]};const details=document.getElementById('ticket-details').value.trim();const {data:ticket,error}=await client.from('support_tickets').insert(payload).select('id').single();if(error){setAuthStatus(error.message,'status priority');return}const message=await client.from('ticket_messages').insert({ticket_id:ticket.id,author_id:user.id,body:details});if(message.error){setAuthStatus(message.error.message,'status priority');return}toast('Support ticket submitted.');ticketForm.reset();await loadTickets(user)});
   }else{
     document.querySelectorAll('form[data-demo-form]').forEach(form=>form.addEventListener('submit',event=>{event.preventDefault();toast(form.dataset.demoForm==='ticket'?'Ticket saved. Sign in to view its status.':'Supabase account access is unavailable right now. Please try again shortly.')}));
