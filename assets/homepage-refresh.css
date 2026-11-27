@@ -159,3 +159,12 @@
 @media (prefers-reduced-motion: reduce) {
   .bd-home *, .bd-home *::before, .bd-home *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation: none !important; }
 }
+
+
+/* Match the site-wide icon-only account, cart and menu affordances. */
+.bd-home .header-account, .bd-home .header-cart { position: relative; width: 44px; min-width: 44px; height: 44px; min-height: 44px; padding: 0; gap: 0; }
+.bd-home .header-account svg, .bd-home .header-cart > svg { display: block; width: 21px; height: 21px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.bd-home .header-cart .cart-count { position: absolute; top: 0; right: -1px; display: inline-flex; align-items: center; justify-content: center; min-width: 17px; height: 17px; padding: 0 4px; border: 1px solid var(--home-teal); border-radius: 999px; background: var(--home-mint); color: var(--home-teal); font-size: .64rem; line-height: 1; }
+.bd-home .header-cart .cart-count[hidden] { display: none; }
+.bd-home .menu-btn { width: 44px; min-width: 44px; height: 44px; padding: 0; }
+.bd-home .menu-btn svg { display: block; width: 23px; height: 23px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }

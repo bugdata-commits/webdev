@@ -147,8 +147,8 @@
     document.querySelectorAll('[data-auth-switch]').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
   }));
   const menu = $('#bdMenu'), nav = $('#bdLinks');
-  menu?.addEventListener('click', () => { const open = nav.classList.toggle('bd-open'); menu.setAttribute('aria-expanded', String(open)); menu.textContent = open ? 'Close' : 'Menu'; });
-  nav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => { nav.classList.remove('bd-open'); menu?.setAttribute('aria-expanded', 'false'); if (menu) menu.textContent = 'Menu'; }));
+  menu?.addEventListener('click', () => { const open = nav.classList.toggle('bd-open'); menu.setAttribute('aria-expanded', String(open)); menu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation'); });
+  nav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => { nav.classList.remove('bd-open'); menu?.setAttribute('aria-expanded', 'false'); if (menu) menu.setAttribute('aria-label', 'Open navigation'); }));
   const year = $('#bdYear'); if (year) year.textContent = new Date().getFullYear();
   if (client) {
     client.auth.getSession().then(async ({ data }) => { user = data.session?.user || null; renderAuth(); setStatus(user ? 'Signed in. Request a course from the catalog to add its starter lessons.' : 'Sign in or create a student account to get started.', user ? 'success' : ''); const pending = localStorage.getItem(pendingKey); if (user && pending && catalog[pending]) { localStorage.removeItem(pendingKey); await persistCourseRequest(pending); } }).catch((error) => { console.error(error); setStatus('Could not reach the account service. Please retry when connected.', 'error'); });

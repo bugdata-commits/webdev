@@ -3,11 +3,7 @@
     if (!button || !nav) return;
     nav.classList.remove('open', 'bd-open');
     button.setAttribute('aria-expanded', 'false');
-    if (button.classList.contains('menu-btn')) {
-      button.setAttribute('aria-label', 'Open navigation');
-    } else {
-      button.textContent = 'Menu';
-    }
+    button.setAttribute('aria-label', 'Open navigation');
   };
 
   document.addEventListener('keydown', (event) => {
