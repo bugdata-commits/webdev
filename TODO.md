@@ -1,17 +1,6 @@
-# Bugdata website refresh — outcome checklist
+## Attached homepage redesign — local implementation
 
-## Completed in earlier published iterations
-
-- [x] **Keep Bugdata’s original web and course prices.** The eligible Zimbabwe-domain website offer remains **$24.99**; the `.com` offer remains **$50**; course fees remain **$100** and **$50**. Do not reintroduce the superseded `$224.99` price or invent unapproved pricing.
-- [x] **Preserve the existing multi-page website and its working paths.** The website includes the student portal/authentication, forms, checkout/cart/payment, Supabase configuration and current routes. These must continue to work; do not alter their application behavior for this copy/design iteration.
-- [x] **Keep the currently published production site unchanged while this iteration was under review.** Prior publication remained at the existing published commit through review. DOAZ subsequently explicitly authorized publication of this exact iteration on 2026-11-26; see the current authorization item below.
-
-## Current operational-waste positioning iteration
-
-- [x] **Position Bugdata around eliminating operational waste for local businesses.** Explain the problem: “How much time and money is being wasted right now?” Describe the better operating state when waste is reduced, and explain how Bugdata can begin helping without fabricating a turnaround time. Focus on client ROI and building end-to-end operating systems—not merely making chatbots. Do not position Bugdata as exclusively an AI company.
-- [x] **Show all five requested positioning pillars on the homepage.** Make these visible in concise, clear copy: (1) Process, not tools. (2) Architect, not installer. (3) Leverage, not AI. (4) ROI partner, not vendor; communicate measurement of hours saved, headcount/capacity and revenue where relevant without promising results. (5) End-to-end builder: map → design → build → deploy → support.
-- [x] **Keep impact claims grounded.** Do not invent or guarantee savings, ROI, hours saved, headcount cuts/avoidance, revenue growth or delivery speed. Use assessment, target-setting and measurement language until Bugdata supplies verified case data. Any labor-cost estimator must use visitor-entered assumptions, label its calculation illustrative, and say that estimated cost is not guaranteed/recoverable savings or ROI.
-- [x] **Reframe service and automation routes without dropping services.** Organize solutions around business/operating needs; present AI as one optional enabler among process, people, integrations, websites, applications and other digital tools. The existing workflow/automation route and its enquiry links remain reachable; retain service descriptions and routes, without making AI Bugdata’s central business category.
-- [x] **Use a simple Spaceship-inspired structure while keeping Bugdata’s logo colors.** Replace the generic futuristic/cosmic visual language with a clean, clear, responsive service-business experience, grounded in Bugdata’s teal/mint/cyan/violet logo palette. This is inspiration only; do not copy Spaceship branding. Preserve existing photographs where appropriate, accessibility, keyboard focus, mobile navigation/Escape handling, reduced-motion behavior, forms, links and anchors.
-- [x] **Keep existing pricing and the full site structure intact.** Preserve the eligible Zimbabwe-domain website offer of **$24.99**, `.com` website offer of **$50**, and course fees of **$100** and **$50**. Keep all existing routes/functionality, including portal/authentication, forms, checkout/cart/payment, Supabase and public-service content.
-- [x] **Receive DOAZ’s explicit authorization before production release.** This iteration was held unpublished for review. DOAZ explicitly authorized publication in the current task on 2026-11-26; that approval applies to this reviewed iteration only.
+- [x] Integrated the supplied visual direction and useful copy while keeping the existing site shell, account/cart access, routes and five positioning pillars.
+- [x] Omitted sample testimonials and unsupported outcome claims; replaced them with process, scope and measurement commitments.
+- [x] Checked local links and fragment targets; prepared desktop and mobile prototype captures for review.
+- [x] Kept the iteration local and unpublished; no deployment or commit was made.
