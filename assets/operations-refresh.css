@@ -249,6 +249,8 @@ select:focus-visible, summary:focus-visible {
     border-bottom: 1px solid rgba(42,85,91,.16) !important;
     box-shadow: 0 12px 24px rgba(24,58,48,.08);
   }
+  .bd-links.bd-open { align-items: center !important; }
+  .bd-links.bd-open a { width: 100%; text-align: center; }
   .nav-links.open a, .bd-links.bd-open a {
     color: #193934 !important;
     border-bottom-color: rgba(42,85,91,.14) !important;
