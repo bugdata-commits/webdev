@@ -1,7 +1,17 @@
 (function(){
   const toast=(message)=>{let el=document.querySelector('.toast');if(!el){el=document.createElement('div');el.className='toast';document.body.appendChild(el)}el.textContent=message;window.clearTimeout(el._timer);el._timer=window.setTimeout(()=>el.remove(),4200)};
   const hasSupabase=window.supabase&&window.BUGDATA_SUPABASE_URL&&window.BUGDATA_SUPABASE_PUBLISHABLE_KEY;
-  const client=hasSupabase?window.supabase.createClient(window.BUGDATA_SUPABASE_URL,window.BUGDATA_SUPABASE_PUBLISHABLE_KEY):null;
+  const timedOutRequests=new WeakSet();
+  const timeoutFetch=async(input,init={})=>{
+    const controller=new AbortController();const parentSignal=init.signal;let timedOut=false;
+    const abortFromParent=()=>controller.abort(parentSignal?.reason);
+    if(parentSignal?.aborted)abortFromParent();else parentSignal?.addEventListener('abort',abortFromParent,{once:true});
+    const timer=window.setTimeout(()=>{timedOut=true;controller.abort()},30000);
+    try{return await window.fetch(input,{...init,signal:controller.signal})}
+    catch(error){if(timedOut&&error&&(typeof error==='object'||typeof error==='function'))timedOutRequests.add(error);throw error}
+    finally{window.clearTimeout(timer);parentSignal?.removeEventListener('abort',abortFromParent)}
+  };
+  const client=hasSupabase?window.supabase.createClient(window.BUGDATA_SUPABASE_URL,window.BUGDATA_SUPABASE_PUBLISHABLE_KEY,{global:{fetch:timeoutFetch}}):null;
   const setAuthStatus=(message,kind='')=>{const el=document.getElementById('authStatus');if(el){el.textContent=message;el.className='notice '+kind}};
   const authForms=[...document.querySelectorAll('form[data-demo-form="auth"]')];
   const ticketForm=document.querySelector('form[data-demo-form="ticket"]');
@@ -29,7 +39,29 @@
     syncSession();
     client.auth.onAuthStateChange((_event,session)=>{if(session)loadTickets(session.user);syncSession()});
     if(authForms[0])authForms[0].addEventListener('submit',async e=>{e.preventDefault();const email=document.getElementById('signin-email').value.trim(),password=document.getElementById('signin-password').value;const {error}=await client.auth.signInWithPassword({email,password});if(error)setAuthStatus(error.message,'status priority');else toast('Signed in successfully.')});
-    if(authForms[1])authForms[1].addEventListener('submit',async e=>{e.preventDefault();const name=document.getElementById('signup-name').value.trim(),business=document.getElementById('signup-business').value.trim(),email=document.getElementById('signup-email').value.trim(),password=document.getElementById('signup-password').value;if(password.length<8){setAuthStatus('Choose a password with at least 8 characters.','status priority');return}const {error}=await client.auth.signUp({email,password,options:{data:{full_name:name,business_name:business}}});if(error)setAuthStatus(error.message,'status priority');else setAuthStatus('Account created. Check your email if confirmation is enabled.','')});
+    if(authForms[1])authForms[1].addEventListener('submit',async e=>{
+      e.preventDefault();
+      const form=e.currentTarget,button=form.querySelector('button[type="submit"]');
+      if(button?.disabled)return;
+      const name=document.getElementById('signup-name').value.trim(),business=document.getElementById('signup-business').value.trim(),email=document.getElementById('signup-email').value.trim(),password=document.getElementById('signup-password').value;
+      if(password.length<8){setAuthStatus('Choose a password with at least 8 characters.','status priority');return}
+      const originalButtonText=button?.textContent;
+      if(button){button.disabled=true;button.textContent='Creating account…'}
+      form.setAttribute('aria-busy','true');setAuthStatus('Submitting your signup request…','');
+      try{
+        const {data,error}=await client.auth.signUp({email,password,options:{data:{full_name:name,business_name:business}}});
+        if(error){setAuthStatus(error.message,'status priority');return}
+        if(!data?.user){setAuthStatus('Supabase returned no account record, so signup was not confirmed. Please try again or contact support.','status priority');return}
+        if(Array.isArray(data.user.identities)&&data.user.identities.length===0){setAuthStatus('This email may already be registered. Try signing in or use Forgot password. If you just submitted a signup, check your inbox for a confirmation message.','status priority');return}
+        if(data.session){setAuthStatus('Account created and signed in.','');await syncSession();return}
+        setAuthStatus(`Signup request accepted for ${email}. If email confirmation is required, check your inbox and Spam/Junk for a confirmation link.`,'');
+      }catch(error){
+        if(timedOutRequests.has(error))setAuthStatus('The signup request timed out. It may still have reached Supabase; check your inbox or try signing in before submitting again.','status priority');
+        else setAuthStatus(`Signup could not be completed: ${error?.message||'a network error occurred'}. Check your connection and try again.`,'status priority');
+      }finally{
+        form.removeAttribute('aria-busy');if(button){button.disabled=false;button.textContent=originalButtonText}
+      }
+    });
     if(authForms[2])authForms[2].addEventListener('submit',async e=>{e.preventDefault();const email=document.getElementById('reset-email').value.trim();const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+window.location.pathname});if(error)setAuthStatus(error.message,'status priority');else toast('Password reset instructions requested.')});
     if(ticketForm)ticketForm.addEventListener('submit',async e=>{e.preventDefault();const {data:{user}}=await client.auth.getUser();if(!user){setAuthStatus('Please sign in before submitting a ticket.','status priority');return}const payload={client_id:user.id,subject:document.getElementById('ticket-subject').value.trim(),category:document.getElementById('ticket-category').value,priority:document.getElementById('ticket-priority').value.toLowerCase().split(' ')[0]};const details=document.getElementById('ticket-details').value.trim();const {data:ticket,error}=await client.from('support_tickets').insert(payload).select('id').single();if(error){setAuthStatus(error.message,'status priority');return}const message=await client.from('ticket_messages').insert({ticket_id:ticket.id,author_id:user.id,body:details});if(message.error){setAuthStatus(message.error.message,'status priority');return}toast('Support ticket submitted.');ticketForm.reset();await loadTickets(user)});
   }else{
